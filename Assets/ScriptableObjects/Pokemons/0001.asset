@@ -25,6 +25,21 @@ MonoBehaviour:
   backAnimatedSpriteSheet: {fileID: 1335795206, guid: c4a8bffa8b15386499ce019de951f545, type: 3}
   frontShinyAnimatedSpriteSheet: {fileID: 1136637648, guid: 458fb7b5e7ec1264e97f19fdbddda16f, type: 3}
   backShinyAnimatedSpriteSheet: {fileID: 364286542, guid: 4ac6a38176c2be049a7c0556e821f6e4, type: 3}
+  type1: 5
+  type2: 8
+  maxHp: 45
+  attack: 49
+  defence: 49
+  spAttack: 65
+  spDefence: 65
+  speed: 45
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: c8b47ec7c05adbb41a5deddb9a1f8ef0, type: 2}
+    requiredLevel: 1
+  - moveBase: {fileID: 11400000, guid: db2e5ab90527d95449fa1e391776c97d, type: 2}
+    requiredLevel: 3
+  - moveBase: {fileID: 11400000, guid: 71233a8c67057204ea132aa72b01c46e, type: 2}
+    requiredLevel: 12
   references:
     version: 2
     RefIds:

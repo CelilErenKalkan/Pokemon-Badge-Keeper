@@ -4,10 +4,10 @@ using System;
 using System.Linq;
 using System.IO;
 
-[CustomEditor(typeof(PokemonData))]
+[CustomEditor(typeof(PokemonBase))]
 public class PokemonDataEditor : Editor
 {
-    private PokemonData pokemonDataSet;
+    private PokemonBase pokemonBaseSet;
     private SerializedProperty abilitiesProp;
 
     private string[] subclassNames;
@@ -36,7 +36,7 @@ public class PokemonDataEditor : Editor
     {
         EditorApplication.update += EditorUpdate;
 
-        pokemonDataSet = (PokemonData)target;
+        pokemonBaseSet = (PokemonBase)target;
         abilitiesProp = serializedObject.FindProperty("possibleAbilities");
 
         // Get Ability subclasses
@@ -74,17 +74,71 @@ public class PokemonDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("pokemonName"), new GUIContent("Pokemon Name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("classification"), new GUIContent("Classification"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("pokedex_entry"), new GUIContent("Pokedex Entry"));
+        
+        EditorGUILayout.Space(10);
+
+        EditorGUILayout.LabelField("Types", EditorStyles.boldLabel);
+        
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("type1"), new GUIContent("Pokemon Type 1"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("type2"), new GUIContent("Pokemon Type 2"));
 
         EditorGUILayout.Space(10);
 
         EditorGUILayout.LabelField("Abilities", EditorStyles.boldLabel);
 
-        var sortedAbilities = pokemonDataSet.possibleAbilities
+        var sortedAbilities = pokemonBaseSet.possibleAbilities
             .OrderBy(a => a.isHidden)
             .ThenBy(a => a.AbilityName)
             .ToList();
 
         DrawAbilityList(sortedAbilities);
+        
+        EditorGUILayout.Space(10);
+
+        EditorGUILayout.LabelField("Stats", EditorStyles.boldLabel);
+        
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxHp"), new GUIContent("HP"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("attack"), new GUIContent("Attack"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("defence"), new GUIContent("Defence"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("spAttack"), new GUIContent("SpAttack"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("spDefence"), new GUIContent("SpDefence"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("speed"), new GUIContent("Speed"));
+        
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("----------------------------------------------------", EditorStyles.label);
+        EditorGUILayout.Space();
+        
+        EditorGUILayout.LabelField("Learnable Moves", EditorStyles.boldLabel);
+        EditorGUILayout.Space(10);
+        
+        SerializedProperty learnableMovesProp = serializedObject.FindProperty("learnableMoves");
+
+        for (int i = 0; i < learnableMovesProp.arraySize; i++)
+        {
+            SerializedProperty element = learnableMovesProp.GetArrayElementAtIndex(i);
+            SerializedProperty moveBaseProp = element.FindPropertyRelative("moveBase");
+            SerializedProperty levelProp = element.FindPropertyRelative("requiredLevel");
+
+            string label = $"Move {i + 1}";
+
+            if (moveBaseProp != null && moveBaseProp.objectReferenceValue != null)
+            {
+                MoveBase moveBase = moveBaseProp.objectReferenceValue as MoveBase;
+                if (moveBase != null)
+                {
+                    label = moveBase.MoveName;
+                }
+            }
+
+            // Append level if set (e.g. > 0)
+            if (levelProp != null && levelProp.intValue > 0)
+            {
+                label += $" (Lv {levelProp.intValue})";
+            }
+
+            EditorGUILayout.PropertyField(element, new GUIContent(label), true);
+        }
+        
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("----------------------------------------------------", EditorStyles.label);
@@ -102,8 +156,8 @@ public class PokemonDataEditor : Editor
             var nameProp = subclassTypes[selectedIndex].GetProperty("Name", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             nameProp?.SetValue(newAbility, subclassTypes[selectedIndex].Name);
 
-            pokemonDataSet.possibleAbilities.Add(newAbility);
-            EditorUtility.SetDirty(pokemonDataSet);
+            pokemonBaseSet.possibleAbilities.Add(newAbility);
+            EditorUtility.SetDirty(pokemonBaseSet);
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -148,7 +202,7 @@ public class PokemonDataEditor : Editor
         for (int i = 0; i < abilities.Count; i++)
         {
             var ability = abilities[i];
-            int index = pokemonDataSet.possibleAbilities.IndexOf(ability);
+            int index = pokemonBaseSet.possibleAbilities.IndexOf(ability);
             SerializedProperty element = abilitiesProp.GetArrayElementAtIndex(index);
 
             string label = !string.IsNullOrEmpty(ability.AbilityName)
@@ -167,8 +221,8 @@ public class PokemonDataEditor : Editor
 
             if (GUILayout.Button("Delete", GUILayout.Width(60)))
             {
-                pokemonDataSet.possibleAbilities.Remove(ability);
-                EditorUtility.SetDirty(pokemonDataSet);
+                pokemonBaseSet.possibleAbilities.Remove(ability);
+                EditorUtility.SetDirty(pokemonBaseSet);
                 break;
             }
 
@@ -178,7 +232,7 @@ public class PokemonDataEditor : Editor
 
     private void AutoAssignSprites()
     {
-        string baseName = pokemonDataSet.name;
+        string baseName = pokemonBaseSet.name;
         string folderPath = $"Assets/Sprites/Pokemon/{baseName}/";
 
         if (!Directory.Exists(folderPath))
@@ -220,10 +274,6 @@ public class PokemonDataEditor : Editor
         frontShinyAnimationFrames = frontShinyList.OrderBy(s => s.name).ToArray();
         backAnimationFrames = backList.OrderBy(s => s.name).ToArray();
         backShinyAnimationFrames = backShinyList.OrderBy(s => s.name).ToArray();
-
-        Debug.Log($"Loaded sprites for {baseName}: " +
-            $"Front ({frontAnimationFrames.Length}), Front Shiny ({frontShinyAnimationFrames.Length}), " +
-            $"Back ({backAnimationFrames.Length}), Back Shiny ({backShinyAnimationFrames.Length})");
     }
 
     private void UpdateFrame()
