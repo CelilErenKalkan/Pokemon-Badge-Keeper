@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c15dcdb185960428e6328cf8e7107d, type: 3}
+  m_Name: 0001
+  m_EditorClassIdentifier: 
+  pokemonName: Bulbasaur
+  classification: 0
+  pokedex_entry: For some time after its birth, it uses the nutrients that are packed
+    into the seed on its back in order to grow.
+  dex_no: 1
+  possibleAbilities:
+  - rid: 2084548292426596357
+  - rid: 2084548302548238336
+  pokemonImage: {fileID: 0}
+  frontAnimatedSpriteSheet: {fileID: -1295824119, guid: 7ccbe2e6cc68ddf4cadfad8c129b1dae, type: 3}
+  backAnimatedSpriteSheet: {fileID: 1335795206, guid: c4a8bffa8b15386499ce019de951f545, type: 3}
+  frontShinyAnimatedSpriteSheet: {fileID: 1136637648, guid: 458fb7b5e7ec1264e97f19fdbddda16f, type: 3}
+  backShinyAnimatedSpriteSheet: {fileID: 364286542, guid: 4ac6a38176c2be049a7c0556e821f6e4, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 2084548292426596357
+      type: {class: Chlorophyll, ns: , asm: Assembly-CSharp}
+      data:
+        isHidden: 1
+    - rid: 2084548302548238336
+      type: {class: Overgrow, ns: , asm: Assembly-CSharp}
+      data:
+        isHidden: 0

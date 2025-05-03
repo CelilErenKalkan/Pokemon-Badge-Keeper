@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c15dcdb185960428e6328cf8e7107d, type: 3}
+  m_Name: 0002
+  m_EditorClassIdentifier: 
+  pokemonName: Ivysaur
+  classification: 0
+  pokedex_entry: The more sunlight Ivysaur bathes in, the more strength wells up
+    within it, allowing the bud on its back to grow larger.
+  dex_no: 2
+  possibleAbilities:
+  - rid: 2084548292426596358
+  - rid: 2084548292426596359
+  pokemonImage: {fileID: 0}
+  frontAnimatedSpriteSheet: {fileID: 0}
+  backAnimatedSpriteSheet: {fileID: 0}
+  frontShinyAnimatedSpriteSheet: {fileID: 0}
+  backShinyAnimatedSpriteSheet: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 2084548292426596358
+      type: {class: Chlorophyll, ns: , asm: Assembly-CSharp}
+      data:
+        isHidden: 1
+    - rid: 2084548292426596359
+      type: {class: Overgrow, ns: , asm: Assembly-CSharp}
+      data:
+        isHidden: 0
